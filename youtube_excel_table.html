@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טבלת סרטוני אשר ומשפחה</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .summary {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .summary-item {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .controls {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .filter-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        select, input, button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .name-cell {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .title-cell {
+            text-align: right;
+            max-width: 400px;
+            padding-right: 15px;
+        }
+        
+        .link-cell a {
+            color: #007bff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .link-cell a:hover {
+            background: #007bff;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,123,255,0.3);
+        }
+        
+        .export-btn {
+            background: #28a745;
+            margin-left: 10px;
+        }
+        
+        .export-btn:hover {
+            background: #1e7e34;
+        }
+        
+        .row-number {
+            background: #e9ecef;
+            font-weight: bold;
+            width: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .filter-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            table {
+                min-width: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📹 טבלת סרטוני אשר ומשפחה</h1>
+        <p>אוסף מלא של 200 סרטונים מיוטיוב</p>
+    </div>
+    
+    <div class="summary">
+        <h3>📊 סיכום כללי</h3>
+        <p><strong>סה"כ סרטונים:</strong> 200</p>
+        <div class="summary-grid">
+            <div class="summary-item">אשר נועה: 14 סרטונים</div>
+            <div class="summary-item">אשר רוני: 20 סרטונים</div>
+            <div class="summary-item">אשר הילה: 27 סרטונים</div>
+            <div class="summary-item">אשר יהלי: 17 סרטונים</div>
+            <div class="summary-item">אשר טוהר: 18 סרטונים</div>
+            <div class="summary-item">אשר יובל: 28 סרטונים</div>
+            <div class="summary-item">אשר אסא: 42 סרטונים</div>
+            <div class="summary-item">אשר אלה: 16 סרטונים</div>
+            <div class="summary-item">אשר אילון: 18 סרטונים</div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <div class="filter-container">
+            <label>🔍 סינון לפי שם:</label>
+            <select id="nameFilter">
+                <option value="">הכל</option>
+                <option value="אשר נועה">אשר נועה</option>
+                <option value="אשר רוני">אשר רוני</option>
+                <option value="אשר הילה">אשר הילה</option>
+                <option value="אשר יהלי">אשר יהלי</option>
+                <option value="אשר טוהר">אשר טוהר</option>
+                <option value="אשר יובל">אשר יובל</option>
+                <option value="אשר אסא">אשר אסא</option>
+                <option value="אשר אלה">אשר אלה</option>
+                <option value="אשר אילון">אשר אילון</option>
+            </select>
+            
+            <label>🔍 חיפוש בכותרת:</label>
+            <input type="text" id="titleSearch" placeholder="הקלד מילת חיפוש...">
+            
+            <button onclick="filterTable()">סנן</button>
+            <button onclick="resetFilters()">איפוס</button>
+            <button class="export-btn" onclick="exportToCSV()">📁 יצוא ל-CSV</button>
+        </div>
+    </div>
+    
+    <div class="table-container">
+        <table id="videosTable">
+            <thead>
+                <tr>
+                    <th width="50px">#</th>
+                    <th width="120px">שם</th>
+                    <th width="500px">כותרת הסרטון</th>
+                    <th width="100px">קישור</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- הנתונים ייטענו כאן -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const videosData = [
+            // אשר נועה
+            { name: 'אשר נועה', title: 'אשר נועה 5 יוֹם הולדת פתיחת המתנות 13.3.19', link: 'https://www.youtube.com/watch?v=SntJu0ilAo8' },
+            { name: 'אשר נועה', title: 'אשר נועה 5 יוֹם הולדת 13.3.19', link: 'https://www.youtube.com/watch?v=IfBaSjBklL0' },
+            { name: 'אשר נועה', title: 'אשר נועה הצבעים והמספרים באנגלית 16.1.18', link: 'https://www.youtube.com/watch?v=c-RMWIifr8U' },
+            { name: 'אשר נועה', title: 'אשר נועה 2 יום הולדת 13.3.16', link: 'https://www.youtube.com/watch?v=Q58iHssG5tE' },
+            { name: 'אשר נועה', title: 'אשר נועה 2 יום הולדת- גן נעמת 16.3.16', link: 'https://www.youtube.com/watch?v=A41uXbqYNvM' },
+            { name: 'אשר נועה', title: 'אשר נועה נכנסת לבד לגן 8.11.15', link: 'https://www.youtube.com/watch?v=8kwiz1DwEdE' },
+            { name: 'אשר נועה', title: 'אשר נועה שרה נחניאלי קטן 28.3.17', link: 'https://www.youtube.com/watch?v=-lj73lDLtzg' },
+            { name: 'אשר נועה', title: 'אשר נועה ואלה רוקדות ערבית 26.2.21', link: 'https://www.youtube.com/watch?v=m3SsLum2jno' },
+            { name: 'אשר נועה', title: 'אשר נועה בשיר כמו בריו הופפה 7.6.16', link: 'https://www.youtube.com/watch?v=iOcwe3HW2bo&t=134s' },
+            { name: 'אשר נועה', title: 'אשר נועה ואלה בשירים עלומה ואמא יקרה 18.11.16', link: 'https://www.youtube.com/watch?v=hoSjWewex8I' },
+            { name: 'אשר נועה', title: 'אשר נועה 7 יום הולדת 13.3.21', link: 'https://www.youtube.com/watch?v=YRVT2pny76E' },
+            { name: 'אשר נועה', title: 'אשר נועה ואלה כיתה א 5.9.20', link: 'https://www.youtube.com/watch?v=Ue_d2S5_4y4' },
+            { name: 'אשר נועה', title: 'אשר נועה ואלה מאפרות את סבא 30.5.20', link: 'https://www.youtube.com/watch?v=1G03Wb6BmVQ&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר נועה', title: 'אשר נועה שרה ורוקדת כמו בריו 11.10.19', link: 'https://www.youtube.com/watch?v=W6O5U3Aa650' },
+
+            // אשר רוני
+            { name: 'אשר רוני', title: 'אשר רוני ההצדעות בהשבעה הולץ חיל האויר 21.9.23', link: 'https://www.youtube.com/watch?v=pPvAZOOpnMg' },
+            { name: 'אשר רוני', title: 'אשר רוני טקס השבעה ביה\'ס הולץ חיל אויר 21.9.23', link: 'https://www.youtube.com/watch?v=l7btfZ94GR8' },
+            { name: 'אשר רוני', title: 'אשר רוני ויובל בבריכה 30.10.15', link: 'https://www.youtube.com/watch?v=JLgrk5cwPrE&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר רוני', title: 'אשר רוני בר-מצווה חלק 9 ארוחת הצהרים והסיום 9.6.22', link: 'https://www.youtube.com/watch?v=6LEez9jt3iI' },
+            { name: 'אשר רוני', title: 'אשר רוני בר-מצווה חלק 8 אני ומשפחתי בכותל 9.6.22', link: 'https://www.youtube.com/watch?v=Pd5S08zMjxQ' },
+            { name: 'אשר רוני', title: 'אשר רוני בר מצווה חלק 7 הקריאה בתורה 9.6.22', link: 'https://www.youtube.com/watch?v=aOXuj0hdPKQ' },
+            { name: 'אשר רוני', title: 'אשר רוני בר מצווה חלק 6 הנחת התפילין בכותל 9.6.22', link: 'https://www.youtube.com/watch?v=2qXOOE_UgUk' },
+            { name: 'אשר רוני', title: 'אשר רוני בר מצווה חלק 5 הקליפ בכותל 9.6.22', link: 'https://www.youtube.com/watch?v=ZaJg1bww9VQ' },
+            { name: 'אשר רוני', title: 'אשר רוני בר מצווה חלק 4 הצעידה לכותל 9.6.22', link: 'https://www.youtube.com/watch?v=vfipU2gs1J0' },
+            { name: 'אשר רוני', title: 'אשר רוני בר מצווה חלק 3 החפלה באוטובוס 9.6.22', link: 'https://www.youtube.com/watch?v=ZGrecsuycPs' },
+            { name: 'אשר רוני', title: 'אשר רוני בר מצווה חלק 2 הקליפ ביער 9.6.22', link: 'https://www.youtube.com/watch?v=un7RBQNFuqE' },
+            { name: 'אשר רוני', title: 'אשר רוני בר מצווה חלק 1 המפגש וארוחת הבוקר ביער 9.6.22', link: 'https://www.youtube.com/watch?v=oK-1bLQXEGc' },
+            { name: 'אשר רוני', title: 'אשר רוני ויובל פתיחת עונת הרחצה 26.5.16', link: 'https://www.youtube.com/watch?v=PwzBrFg6Ql0' },
+            { name: 'אשר רוני', title: 'אשר רוני הכניסה לביה\'ס 11.10.15', link: 'https://www.youtube.com/watch?v=clFyMTKrFhg' },
+            { name: 'אשר רוני', title: 'אשר רוני נקרע מצחוק 7.4.10', link: 'https://www.youtube.com/watch?v=L6pew7Z1Kqg' },
+            { name: 'אשר רוני', title: 'אשר רוני יום ללא ביה\'ס עם סבא וביקור מנחם 13.6.16', link: 'https://www.youtube.com/watch?v=Pi-VW9Sn36k' },
+            { name: 'אשר רוני', title: 'אשר רוני רוקד ני גנה -סופר סאקו - 15.1.18', link: 'https://www.youtube.com/watch?v=xNBj3nhRMpw' },
+            { name: 'אשר רוני', title: 'אשר רוני ויובל בני יהודה האימון הראשון 13.10.17', link: 'https://www.youtube.com/watch?v=J86XB3cEw_s' },
+            { name: 'אשר רוני', title: 'אשר רוני בן 6 חודשים 9.1.10', link: 'https://www.youtube.com/watch?v=oLBa7FU_1c8' },
+            { name: 'אשר רוני', title: 'אשר רוני בן 6 חודשים 9.1.10', link: 'https://www.youtube.com/watch?v=SALlljekbZM' },
+
+            // אשר הילה
+            { name: 'אשר הילה', title: 'אשר הילה שנה וחצי 27.10.08', link: 'https://www.youtube.com/watch?v=3iA7njiCuWc' },
+            { name: 'אשר הילה', title: 'אשר הילה בת מצווה בשיר הסולו 11.7.19', link: 'https://www.youtube.com/watch?v=tf3-K_VFeLg' },
+            { name: 'אשר הילה', title: 'אשר הילה בת מצווה הטברנה 11.7.19', link: 'https://www.youtube.com/watch?v=SK1JFZ_YhZg' },
+            { name: 'אשר הילה', title: 'אשר הילה בת מצווה הריקוד האומנותי 11.7.19', link: 'https://www.youtube.com/watch?v=qId8vjXnzpo' },
+            { name: 'אשר הילה', title: 'אשר הילה בת מצווה 11.7.19', link: 'https://www.youtube.com/watch?v=dSFmtT32xsY' },
+            { name: 'אשר הילה', title: 'אשר הילה 2 יומולדת גן ויצ\'ו 26.3.09', link: 'https://www.youtube.com/watch?v=K98BI0i8i-Q' },
+            { name: 'אשר הילה', title: 'אשר הילה ויובל שרים אבא 11.10.19', link: 'https://www.youtube.com/watch?v=JhqUTgVzQec&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר הילה', title: 'אשר הילה יהלי טוהר והסליים 21.3.18', link: 'https://www.youtube.com/watch?v=dvKo2my48rc' },
+            { name: 'אשר הילה', title: 'אשר הילה יהלי וטוהר בברכה הביתית 14.8.17', link: 'https://www.youtube.com/watch?v=ydP9W1AyN4w' },
+            { name: 'אשר הילה', title: 'אשר הילה 7 רכיבה טיפולית לילית 30.10.17', link: 'https://www.youtube.com/watch?v=nOrvG4dLAqA&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר הילה', title: 'אשר הילה בטכס זיכרון לרוה\'מ רבין 4.11.15', link: 'https://www.youtube.com/watch?v=ryyVdCYmLkk' },
+            { name: 'אשר הילה', title: 'אשר הילה 4 - רכיבה טיפולית 25.3.16', link: 'https://www.youtube.com/watch?v=SLAieCmu0fo' },
+            { name: 'אשר הילה', title: 'אשר הילה 9 יום הולדת 26.3.16', link: 'https://www.youtube.com/watch?v=pnjdQFMoO3k' },
+            { name: 'אשר הילה', title: 'אשר הילה 1 רכיבה טיפולית 22.7.15', link: 'https://www.youtube.com/watch?v=Iw3bbwmf-BY' },
+            { name: 'אשר הילה', title: 'אשר הילה וסבא שרים "מהשמים" 16.6.10', link: 'https://www.youtube.com/watch?v=f5Du6ZEOSp4' },
+            { name: 'אשר הילה', title: 'אשר הילה ויהלי משתטים 25.6.16', link: 'https://www.youtube.com/watch?v=3fFpzsv9tuA' },
+            { name: 'אשר הילה', title: 'אשר הילה ויהלי סופרות מטבעות 21.4.16', link: 'https://www.youtube.com/watch?v=NJEjEhEFMuY' },
+            { name: 'אשר הילה', title: 'אשר הילה 8 רכיבה טיפולית 20.11.17', link: 'https://www.youtube.com/watch?v=YIHMDeFLraY' },
+            { name: 'אשר הילה', title: 'אשר הילה רכיבה 6 טיפולית 14.8.17', link: 'https://www.youtube.com/watch?v=kvDlydg403A' },
+            { name: 'אשר הילה', title: 'אשר הילה ויהלי רוקדות -אמא 8.5.14', link: 'https://www.youtube.com/watch?v=vW81i44QpwA' },
+            { name: 'אשר הילה', title: 'אשר הילה ויהלי מנקות ומבשלות בחופש הגדול 19.7.18', link: 'https://www.youtube.com/watch?v=Hwvti5ftrvs' },
+            { name: 'אשר הילה', title: 'אשר הילה ויהלי ההפתעה להורים ביום האהבה 15.8.19', link: 'https://www.youtube.com/watch?v=h8YloxpmDqY' },
+            { name: 'אשר הילה', title: 'אשר הילה ויהלי בהפלגה לקפריסין קראון איריס 16.5.19', link: 'https://www.youtube.com/watch?v=yQy0ZVg6YnE' },
+            { name: 'אשר הילה', title: 'אשר הילה בת 21 חודשים 17.1.10', link: 'https://www.youtube.com/watch?v=J5KWvj1MJxY&t=188s' },
+            { name: 'אשר הילה', title: 'אשר הילה רכיבה טיפולית 5 הילוך איטי ותמונות 6.7.16', link: 'https://www.youtube.com/watch?v=UETiNsS1g54' },
+            { name: 'אשר הילה', title: 'אשר הילה ויהלי מטפלות באלה 15.4.15', link: 'https://www.youtube.com/watch?v=rxo1Nmv9hMM&t=1s' },
+            { name: 'אשר הילה', title: 'אשר הילה ויובל שרים אבא 11.10.19', link: 'https://www.youtube.com/watch?v=51V8kbwQbPE' },
+
+            // אשר יהלי
+            { name: 'אשר יהלי', title: 'אשר יהלי קבלת ספר התורה 10.11.17', link: 'https://www.youtube.com/watch?v=h3eQ7uLYg3g' },
+            { name: 'אשר יהלי', title: 'אשר יהלי 6 יום הולדת 26.12.16', link: 'https://www.youtube.com/watch?v=7WEz65uTYVE&t=253s' },
+            { name: 'אשר יהלי', title: 'אשר יהלי 1 רכיבה 5.8.19', link: 'https://www.youtube.com/watch?v=Gog6q1KUMls' },
+
+            // אשר טוהר
+            { name: 'אשר טוהר', title: 'אשר טוהר טורניר כדוריד 1.3.25', link: 'https://www.youtube.com/watch?v=J6XNiKvEK8I' },
+            { name: 'אשר טוהר', title: 'אשר טוהר כניסה 1 לגן 12.8.18', link: 'https://www.youtube.com/watch?v=uytY1NbUM0w' },
+            { name: 'אשר טוהר', title: 'אשר טוהר רוקדת להשתטות לפעמים 17.7.23', link: 'https://www.youtube.com/watch?v=5HfM1VgHMfU' },
+            { name: 'אשר טוהר', title: 'אשר טוהר צעד ראשון 13.3.18', link: 'https://www.youtube.com/watch?v=WiNZoTxf9lc' },
+            { name: 'אשר טוהר', title: 'אשר טוהר שרה לאמא אוהבת אותך 16.10.19', link: 'https://www.youtube.com/watch?v=VW1wooXyNVk' },
+            { name: 'אשר טוהר', title: 'אשר טוהר והנכדים רוקדים 20.3.18', link: 'https://www.youtube.com/watch?v=Wh1V_YDK0pg' },
+            { name: 'אשר טוהר', title: 'אשר טוהר לקט משגע 21.2.18', link: 'https://www.youtube.com/watch?v=WoHFroevDU4' },
+            { name: 'אשר טוהר', title: 'אשר טוהר מְדַבֶּרֶת 23.6.17', link: 'https://www.youtube.com/watch?v=3GaTMgbJiYQ' },
+            { name: 'אשר טוהר', title: 'אשר טוהר רוקדת 22.4.22', link: 'https://www.youtube.com/watch?v=pU9GGvw9Y5c' },
+            { name: 'אשר טוהר', title: 'אשר טוהר מתחילה לדבר 23.6.17', link: 'https://www.youtube.com/watch?v=--pst8o_tcM' },
+            { name: 'אשר טוהר', title: 'אשר טוהר מי אוהב אותך יותר ממני 12.9.17', link: 'https://www.youtube.com/watch?v=df0vdvkEr10' },
+            { name: 'אשר טוהר', title: 'אשר טוהר שכחו אותי בבית 25.8.17', link: 'https://www.youtube.com/watch?v=XGdx_QBBQCA' },
+            { name: 'אשר טוהר', title: 'אשר טוהר הלידה 27.3.17', link: 'https://www.youtube.com/watch?v=K7-UScnqmUA' },
+            { name: 'אשר טוהר', title: 'אשר טוהר ויהלי מתעמלות 24.9.19', link: 'https://www.youtube.com/watch?v=33Fob2LZP7w' },
+            { name: 'אשר טוהר', title: 'אשר טוהר הנכדים והכלב בחוות הסוסים 5.8.19', link: 'https://www.youtube.com/watch?v=Uk6iOsdxqo8' },
+            { name: 'אשר טוהר', title: 'אשר טוהר והסבתות חני ומזל 23.5.17', link: 'https://www.youtube.com/watch?v=ReW6jRYa7X0' },
+            { name: 'אשר טוהר', title: 'אשר טוהר ויהלי סבא וסבתא 23.1.18', link: 'https://www.youtube.com/watch?v=bIyOJCwqun4' },
+            { name: 'אשר טוהר', title: 'אשר טוהר לקט אוגוסט 2017', link: 'https://www.youtube.com/watch?v=XK0jyg-yfoM&t=90s' },
+
+            // אשר יובל
+            { name: 'אשר יובל', title: 'אשר יובל 8 אסא 6 יום הולדת 25.11.18', link: 'https://www.youtube.com/watch?v=cWGbG9b0uyA' },
+            { name: 'אשר יובל', title: 'אשר יובל בר מצווה קליפ 30.11.23', link: 'https://www.youtube.com/watch?v=jHRVPiKkCzw' },
+            { name: 'אשר יובל', title: 'אשר יובל 5 רוצה תפילין 12.1.05', link: 'https://www.youtube.com/watch?v=61HyEegHuHA' },
+            { name: 'אשר יובל', title: 'אשר יובל מברך על נר חנוכה 12.1.15', link: 'https://www.youtube.com/watch?v=WPNKix3NzQ4' },
+            { name: 'אשר יובל', title: 'אשר יובל 9 אסא 7 יום הולדת 25.11.19', link: 'https://www.youtube.com/watch?v=UiLh9BFvwIQ' },
+            { name: 'אשר יובל', title: 'אשר יובל הפועל כפר שלם-האוהדים השרופים 12.12.20', link: 'https://www.youtube.com/watch?v=9PvukDe6qc4' },
+            { name: 'אשר יובל', title: 'אשר יובל אסא ובקשת הסליחה 25.3.16', link: 'https://www.youtube.com/watch?v=PTz2uAns0ZU' },
+            { name: 'אשר יובל', title: 'אשר יובל הפועל כפר שלם - בני יפו 2.4.22', link: 'https://www.youtube.com/watch?v=EbXBbe77Y_0' },
+            { name: 'אשר יובל', title: 'אשר יובל חומוס פול - הטעימה הראשונה 22.9.15', link: 'https://www.youtube.com/watch?v=9CMPRFFHCFM&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר יובל', title: 'אשר יובל 5 אסא 3 יום הולדת 25.11.15', link: 'https://www.youtube.com/watch?v=RXWUnR_UtHc' },
+            { name: 'אשר יובל', title: 'אשר יובל 6 יום הולדת 25.11.16', link: 'https://www.youtube.com/watch?v=5-8CZNVApbE' },
+            { name: 'אשר יובל', title: 'אשר יובל 10 יום הולדת 25.11.20', link: 'https://www.youtube.com/watch?v=cVWwgB_U_Ig' },
+            { name: 'אשר יובל', title: 'אשר יובל טוהר ואילון במצעד צבאי 23.9.21', link: 'https://www.youtube.com/watch?v=Op_08znzBug' },
+            { name: 'אשר יובל', title: 'אשר יובל רוקד מי גנה - סופר סאקו 15.1.18', link: 'https://www.youtube.com/watch?v=GPGLFVMVStI' },
+            { name: 'אשר יובל', title: 'אשר יובל כפר שלם -שמחת המנצחים 7.5.21', link: 'https://www.youtube.com/watch?v=Dfs-wiEErzo' },
+            { name: 'אשר יובל', title: 'אשר יובל כפר שלם- נחלת יהודה - רק הגולים 7.5.21', link: 'https://www.youtube.com/watch?v=Fu-4IRJL8XI' },
+            { name: 'אשר יובל', title: 'אשר יובל הפועל כפר שלם - נחלת יהודה ראשל\'צ 7.5.21', link: 'https://www.youtube.com/watch?v=sf2pTFYy13c&t=275s' },
+            { name: 'אשר יובל', title: 'אשר יובל הפועל כפר שלם- מ.כ אור יהודה 5.5.21', link: 'https://www.youtube.com/watch?v=RhzlcT0lCow' },
+            { name: 'אשר יובל', title: 'אשר יובל הפועל כפר שלם - התמונות 17.4.21', link: 'https://www.youtube.com/watch?v=5XiDhWW3ous' },
+            { name: 'אשר יובל', title: 'אשר יובל הפועל כפר שלם -הכח עמידר 30.4.21', link: 'https://www.youtube.com/watch?v=Y0xIa5fxnEY&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר יובל', title: 'אשר יובל הפועל כפר שלם-בית\'ר ר\'ג -23.4.21', link: 'https://www.youtube.com/watch?v=j6Q3vNw2Yt4' },
+            { name: 'אשר יובל', title: 'אשר יובל הפועל כפר שלם - הפועל הרצליה -10.4.21', link: 'https://www.youtube.com/watch?v=yMFiG3b49co' },
+            { name: 'אשר יובל', title: 'אשר יובל הפועל כפר שלם - הפועל ר"ג -12.3.21', link: 'https://www.youtube.com/watch?v=Yv905SawgXk&t=9s' },
+            { name: 'אשר יובל', title: 'אשר יובל אלוף הריקוד 13.4.18', link: 'https://www.youtube.com/watch?v=z5lqeedvsPg' },
+            { name: 'אשר יובל', title: 'אשר יובל 9 יום הולדת אצל סבתא מרים 30.11.19', link: 'https://www.youtube.com/watch?v=_bxv9FKHj4M' },
+            { name: 'אשר יובל', title: 'אשר יובל הפועל כפר שלם-הפועל הרצליה 12.12.20', link: 'https://www.youtube.com/watch?v=WKsDUK00Rhg&t=20s' },
+            { name: 'אשר יובל', title: 'אשר יובל אסא והעפיפון 2.9.17', link: 'https://www.youtube.com/watch?v=6JsIJytX-00' },
+            { name: 'אשר יובל', title: 'אשר יובל ונועה שרים גיבור של אמא 11.10.19', link: 'https://www.youtube.com/watch?v=y671bSd67T0&t=1s' },
+
+            // אשר אסא
+            { name: 'אשר אסא', title: 'אשר אסא ואילון שרים קווין 12.3.21', link: 'https://www.youtube.com/watch?v=BlhcY_9mpqk' },
+            { name: 'אשר אסא', title: 'אשר אסא סולו בברכה ובים קלאב הוטל אילת רה\'ש 15.9.23', link: 'https://www.youtube.com/watch?v=WqJ-o9p511Q' },
+            { name: 'אשר אסא', title: 'אשר אסא שיפור סגנון בשחיה 14.5.23', link: 'https://www.youtube.com/watch?v=pDYjgxcxsn4' },
+            { name: 'אשר אסא', title: 'אשר אסא ואילון שרים אלביס -Suspicious Minds [מחשבות חשדניות ]- 19.11.22', link: 'https://www.youtube.com/watch?v=QpxP30kRjqk&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אסא', title: 'אשר אסא ואילון שרים אלביס -HOUND DOG [כלב ציד]- 19.11.22', link: 'https://www.youtube.com/watch?v=CitSwGHJQMo' },
+            { name: 'אשר אסא', title: 'אשר אסא שר אלביס That\'s All Right [זה בסדר] 14.12.22', link: 'https://www.youtube.com/watch?v=TJZZf3uiHEg' },
+            { name: 'אשר אסא', title: 'אשר אסא מעניק לאלביס דיוקן 28.9.22', link: 'https://www.youtube.com/watch?v=LmMyigOvrgQ' },
+            { name: 'אשר אסא', title: 'אשר אסא שר אלביס unchained melody +אילון 22.10.22', link: 'https://www.youtube.com/watch?v=AJu-id_xGcY' },
+            { name: 'אשר אסא', title: 'אשר אסא שר אלביס viva las vegas +פיספוסים 22.10.22', link: 'https://www.youtube.com/watch?v=Ytl8Ftz6LoY' },
+            { name: 'אשר אסא', title: 'אשר אסא הפירסומת לגבינת פיראוס 24.9.19', link: 'https://www.youtube.com/watch?v=wKR4-_UbLnI' },
+            { name: 'אשר אסא', title: 'אשר אסא ואילון שרים אלביס - הפיספוסים 1.10.22', link: 'https://www.youtube.com/watch?v=kX3C8sMyJio' },
+            { name: 'אשר אסא', title: 'אשר אסא שר אלביס - unchained melody- מנגינה לא קשורה 26.10.22', link: 'https://www.youtube.com/watch?v=fMu6McDRnsU' },
+            { name: 'אשר אסא', title: 'אשר אסא וְהַרְחָפָן 16.3.18', link: 'https://www.youtube.com/watch?v=tjjjYVm30Xo' },
+            { name: 'אשר אסא', title: 'אשר אסא שר אֶלְבִיס - its now or never', link: 'https://www.youtube.com/watch?v=H-5aehOL9w4' },
+            { name: 'אשר אסא', title: 'אשר אסא שר ורוקד אלביס-שנה טובה 8.10.22', link: 'https://www.youtube.com/watch?v=BbbnOffeLZo&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אסא', title: 'אשר אסא אלה והגיפ 13.2.16', link: 'https://www.youtube.com/watch?v=RHgVa_oZufM&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אסא', title: 'אשר אסא בהופעה של יובל המבולבל בגן התקווה 30.6.16', link: 'https://www.youtube.com/watch?v=3TVEpgmGfEU' },
+            { name: 'אשר אסא', title: 'אשר אסא הכנה לחורף 27.10.15', link: 'https://www.youtube.com/watch?v=lWIyJMlwKU4&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אסא', title: 'אשר אסא מברך את דודה רחל ליום ההולדת 3.10.15', link: 'https://www.youtube.com/watch?v=pFMnShFbpx4' },
+            { name: 'אשר אסא', title: 'אשר אסא סופרמן ברכת בית דני 13.8.16', link: 'https://www.youtube.com/watch?v=VIN3F4BUnK8' },
+            { name: 'אשר אסא', title: 'אשר אסא ואלה הביקור במרפאה 9.11.15', link: 'https://www.youtube.com/watch?v=2ub18QvYTeg' },
+            { name: 'אשר אסא', title: 'אשר אסא מספר מעשה ב 5 בלונים 30.10.15', link: 'https://www.youtube.com/watch?v=KuzJKwzqrCs' },
+            { name: 'אשר אסא', title: 'אשר אסא אלה והגלימות 17.10.15', link: 'https://www.youtube.com/watch?v=S7NyiwB8BWg' },
+            { name: 'אשר אסא', title: 'אשר אסא 2 יום הולדת 28.11.14', link: 'https://www.youtube.com/watch?v=wGdgq0QjfQY' },
+            { name: 'אשר אסא', title: 'אשר אסא מקבל קריוקי 25.5.17', link: 'https://www.youtube.com/watch?v=tmdE7BPrMBo' },
+            { name: 'אשר אסא', title: 'אשר אסא 5 יוֹם הולדת אצל סבתא אהרונה 25.12.17', link: 'https://www.youtube.com/watch?v=STMc-Vy3ToU' },
+            { name: 'אשר אסא', title: 'אשר אסא בקידוש יום שישי בסגר הקורונה 3.4.20', link: 'https://www.youtube.com/watch?v=pRviJ1pQcKE' },
+            { name: 'אשר אסא', title: 'אשר אסא 8 יום הולדת 25.11.20', link: 'https://www.youtube.com/watch?v=OUm-i75uYs8' },
+            { name: 'אשר אסא', title: 'אשר אסא רוֹקֵד מי גנה 22.8.21', link: 'https://www.youtube.com/watch?v=xDVQB7TusJY' },
+            { name: 'אשר אסא', title: 'אשר אסא ואלה ריקודי זוגות 7.11.17', link: 'https://www.youtube.com/watch?v=RuJzow2vk6I' },
+            { name: 'אשר אסא', title: 'אשר אסא רוקד מייקל ג\'קסון בילי ג\'ין 20.3.21', link: 'https://www.youtube.com/watch?v=nw1Xy2RM5Aw' },
+            { name: 'אשר אסא', title: 'אשר אסא 4 יום הולדת בגן הר סיני 25.11.16', link: 'https://www.youtube.com/watch?v=ppt2-EEPKJw' },
+            { name: 'אשר אסא', title: 'אשר אסא רוקד מי גנה והדילוגים 3.5.17', link: 'https://www.youtube.com/watch?v=XPkHyVLhXaY' },
+            { name: 'אשר אסא', title: 'אשר אסא גיבור על 3.5.17', link: 'https://www.youtube.com/watch?v=Jht-N69RiCg' },
+            { name: 'אשר אסא', title: 'אשר אסא 7 יום הולדת עם החברים 25.11.19', link: 'https://www.youtube.com/watch?v=8Kvk6ADf7hw&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אסא', title: 'אשר אסא פרסומת סיגה סיגה 24.4.19', link: 'https://www.youtube.com/watch?v=zMIO2eD6WeI' },
+            { name: 'אשר אסא', title: 'אשר אסא ואוריין מימוני שיעור השחיה ה 1 שלי 1.7.18', link: 'https://www.youtube.com/watch?v=ZEhOHQ3qJR0' },
+            { name: 'אשר אסא', title: 'אשר אסא ואלה רוקדים מייה גינה 23.1.18', link: 'https://www.youtube.com/watch?v=Eb8sZHjNdVk' },
+            { name: 'אשר אסא', title: 'אשר אסא והדילוגים על הטרמפולינה 12.10.17', link: 'https://www.youtube.com/watch?v=ZtFJqDjAsL8' },
+            { name: 'אשר אסא', title: 'אשר אסא פורים מר עגבנייה 5.3.15', link: 'https://www.youtube.com/watch?v=63YPCArRSW8' },
+            { name: 'אשר אסא', title: 'אשר אסא מצייר 10.5.20', link: 'https://www.youtube.com/watch?v=_3T4j-WapOY&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אסא', title: 'אשר אסא ואלה השיעור ה1בבלט 30.8.17', link: 'https://www.youtube.com/watch?v=mfVluM9NNKw' },
+
+            // אשר אלה
+            { name: 'אשר אלה', title: 'אשר אלה 9 יומולדת 27.10.23', link: 'https://www.youtube.com/watch?v=95G0B_bwIh4&t=7s' },
+            { name: 'אשר אלה', title: 'אשר אלה ונועה רוקדות BFF הקצב של התוף 20.10.23', link: 'https://www.youtube.com/watch?v=jlBzhfnCLPk' },
+            { name: 'אשר אלה', title: 'אשר אלה והצבעים באנגלית 3.2.18', link: 'https://www.youtube.com/watch?v=mONNWgtGniM' },
+            { name: 'אשר אלה', title: 'אשר אלה בשיר עלומה 5.4.16', link: 'https://www.youtube.com/watch?v=M6Daa6nAuQU' },
+            { name: 'אשר אלה', title: 'אשר אלה צעד ראשון - התחלתי ללכת 18.9.15', link: 'https://www.youtube.com/watch?v=ppnaLTz8QyM' },
+            { name: 'אשר אלה', title: 'אשר אלה וסבא בשיר עלומה 31.3.16', link: 'https://www.youtube.com/watch?v=imRXfu0_DT8&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אלה', title: 'אשר אלה 1 יום הולדת 27.10.15', link: 'https://www.youtube.com/watch?v=mxFvk9XnEbI' },
+            { name: 'אשר אלה', title: 'אשר אלה והסיפור לקוף יש בעיה 18.5.16', link: 'https://www.youtube.com/watch?v=N8lMOTt8eGk' },
+            { name: 'אשר אלה', title: 'אשר אלה 7 יום הולדת 27.10.21', link: 'https://www.youtube.com/watch?v=O2Q-l2vkfCM' },
+            { name: 'אשר אלה', title: 'אשר אלה המשחקים והגלידה 1.7.17', link: 'https://www.youtube.com/watch?v=QCM-LBfvd1A' },
+            { name: 'אשר אלה', title: 'אשר אלה 2 יום הולדת 27.10.16', link: 'https://www.youtube.com/watch?v=eiuqoiH8N30' },
+            { name: 'אשר אלה', title: 'אשר אלה 4 יום הולדת 27.10.18', link: 'https://www.youtube.com/watch?v=aSagVzBsnO8' },
+            { name: 'אשר אלה', title: 'אשר אלה 3 יום הולדת בגן 27.10.17', link: 'https://www.youtube.com/watch?v=RVHZ786kmN0&t=5s' },
+            { name: 'אשר אלה', title: 'אשר אלה מגוון פעילויות 31.5.15', link: 'https://www.youtube.com/watch?v=sP8ozk_Yick' },
+            { name: 'אשר אלה', title: 'אשר אלה מדברת למצלמה 7.11.20', link: 'https://www.youtube.com/watch?v=AC7WN_vkoRM' },
+            { name: 'אשר אלה', title: 'אשר אלה 6 יום הולדת 27.10.20', link: 'https://www.youtube.com/watch?v=frOk6al7i3A' },
+
+            // אשר אילון
+            { name: 'אשר אילון', title: 'אשר אילון 6 יום הולדת 13.5.24', link: 'https://www.youtube.com/watch?v=tUJ5ViJsrEo&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אילון', title: 'אשר אילון 6 חודשים מקשיב לסבא הזמר 25.11.18', link: 'https://www.youtube.com/watch?v=PoSMPGIxigo' },
+            { name: 'אשר אילון', title: 'אשר אילון 5 יום הולדת 13.5.23', link: 'https://www.youtube.com/watch?v=KKBjlcmborU' },
+            { name: 'אשר אילון', title: 'אשר אילון שר אלביס - suspicious minds [מחשבות חשדניות] 12.1.23', link: 'https://www.youtube.com/watch?v=7yqWPpqWKcM' },
+            { name: 'אשר אילון', title: 'אשר אילון שר אלביס - blue suede shoes [נעלי ז\'מש כחולות] 12.1.23', link: 'https://www.youtube.com/watch?v=t_tVg_Y7d54&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אילון', title: 'אשר אילון שר אלביס its now or never +אסא 22.10.22', link: 'https://www.youtube.com/watch?v=_7-yjbIYtfw' },
+            { name: 'אשר אילון', title: 'אשר אילון שר ביגי\'ס 14.12.22 Stayin\' Alive', link: 'https://www.youtube.com/watch?v=Dyb4OEL7rNw&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אילון', title: 'אשר אילון תיספורת ראשונה 27.2.22', link: 'https://www.youtube.com/watch?v=03CwicVc11c&t=488s' },
+            { name: 'אשר אילון', title: 'אשר אילון רוֹקֵד מי גנה 30.8.21', link: 'https://www.youtube.com/watch?v=lvqSkjR3KzE&t=73s' },
+            { name: 'אשר אילון', title: 'אשר אילון מנשק את סבא ללא גבולות 7.11.20', link: 'https://www.youtube.com/watch?v=yow5b9nquEE' },
+            { name: 'אשר אילון', title: 'אשר אילון רוקד ברייקדנס 10.3.21', link: 'https://www.youtube.com/watch?v=P2iWu2n0SSU' },
+            { name: 'אשר אילון', title: 'אשר אילון מפריע לסבא לישון 26.9.20', link: 'https://www.youtube.com/watch?v=yAnvNWhxdkM' },
+            { name: 'אשר אילון', title: 'אשר אילון והפירות של הבוקר 2.4.19', link: 'https://www.youtube.com/watch?v=NarnXv3Xpmw' },
+            { name: 'אשר אילון', title: 'אשר אילון והגיטרה 2 דייר סטרייטס 14.7.20', link: 'https://www.youtube.com/watch?v=tdz2znMD5GY&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אילון', title: 'אשר אילון 1 והגיטרה לא מצונזר 14.7.20', link: 'https://www.youtube.com/watch?v=xtQN-rNy-_c&t=44s&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר אילון', title: 'אשר אילון 1 והגיטרה סנטנה 14.7.20', link: 'https://www.youtube.com/watch?v=hbZMLB4PAxQ' },
+            { name: 'אשר אילון', title: 'אשר אילון והבורקס 14.11.20', link: 'https://www.youtube.com/watch?v=0XPeIukR_WY' },
+            { name: 'אשר אילון', title: 'אשר אילון ומילקי הביקור באור עקיבא 7.11.20', link: 'https://www.youtube.com/watch?v=6gXPe4PSb80' }
+        ];
+
+        let filteredData = [...videosData];
+
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            data.forEach((video, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="row-number">${index + 1}</td>
+                    <td class="name-cell">${video.name}</td>
+                    <td class="title-cell">${video.title}</td>
+                    <td class="link-cell">
+                        <a href="${video.link}" target="_blank">פתח סרטון</a>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function filterTable() {
+            const nameFilter = document.getElementById('nameFilter').value;
+            const titleSearch = document.getElementById('titleSearch').value.toLowerCase();
+            
+            filteredData = videosData.filter(video => {
+                const matchesName = !nameFilter || video.name === nameFilter;
+                const matchesTitle = !titleSearch || video.title.toLowerCase().includes(titleSearch);
+                return matchesName && matchesTitle;
+            });
+            
+            renderTable(filteredData);
+        }
+
+        function resetFilters() {
+            document.getElementById('nameFilter').value = '';
+            document.getElementById('titleSearch').value = '';
+            filteredData = [...videosData];
+            renderTable(filteredData);
+        }
+
+        function exportToCSV() {
+            const csvHeader = 'מספר,שם,כותרת הסרטון,קישור\n';
+            const csvContent = filteredData.map((video, index) => {
+                return `${index + 1},"${video.name}","${video.title}","${video.link}"`;
+            }).join('\n');
+            
+            const csvData = csvHeader + csvContent;
+            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'asher_videos_table.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Event listeners
+        document.getElementById('nameFilter').addEventListener('change', filterTable);
+        document.getElementById('titleSearch').addEventListener('input', filterTable);
+
+        // Initial render
+        renderTable(videosData);
+    </script>
+</body>
+</html> יהלי בת מצווה הטברנה 16.2.23', link: 'https://www.youtube.com/watch?v=uairlC8YIM4' },
+            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה היוונית 16.2.23', link: 'https://www.youtube.com/watch?v=soLb--oDTGY' },
+            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה הריקוד האומנותי 16.2.23', link: 'https://www.youtube.com/watch?v=5EfO8aTACdA' },
+            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה מסיבת הריקודים 16.2.23', link: 'https://www.youtube.com/watch?v=9kRjcL62cx4&t=1s' },
+            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה קבלת פנים לאורחים 16.2.23', link: 'https://www.youtube.com/watch?v=URxFr5kiKyc' },
+            { name: 'אשר יהלי', title: 'אשר יהלי טכס סיום כיתה ו 29.6.22', link: 'https://www.youtube.com/watch?v=2fms6QBWPBU' },
+            { name: 'אשר יהלי', title: 'אשר יהלי 2 רכיבה טיפולית 26.8.19', link: 'https://www.youtube.com/watch?v=4fZGxgbK9X0&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר יהלי', title: 'אשר יהלי מכינה פנקייק 12.7.20', link: 'https://www.youtube.com/watch?v=b7TOdR7JLKI' },
+            { name: 'אשר יהלי', title: 'אשר יהלי 8 יוֹם הולדת 26.12.18', link: 'https://www.youtube.com/watch?v=djDqMNNT7do' },
+            { name: 'אשר יהלי', title: 'אשר יהלי מסיבת חנוכה בגן 7.12.15', link: 'https://www.youtube.com/watch?v=rlk-mgq9Crc' },
+            { name: 'אשר יהלי', title: 'אשר יהלי 7 יום הולדת 26.12.17', link: 'https://www.youtube.com/watch?v=QVgsACd-33Y&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר יהלי', title: 'אשר יהלי קבלת ספר התורה 10.11.17', link: 'https://www.youtube.com/watch?v=rudvza1Qx3A' },
+            { name: 'אשר יהלי', title: 'אשר יהלי בשירי שבת וקבלת ספר התורה 10.11.17', link: 'https://www.youtube.com/watch?v=nAj6P5EpzK0' },
+            { name: 'אשר יהלי', title: 'אשר יהלי והילה רוקדות - מתפלל 8.5.14', link: 'https://www.youtube.com/watch?v=hDI1fjTYVvc' },
+            { name: 'אשר יהלי', title: 'אשר
