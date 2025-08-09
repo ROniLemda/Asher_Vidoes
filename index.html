@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>טבלת סרטוני אשר ומשפחה</title>
+    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -140,13 +141,13 @@
             box-shadow: 0 2px 8px rgba(0,123,255,0.3);
         }
         
-        .export-btn {
-            background: #28a745;
+        .export-excel-btn {
+            background: #20c997;
             margin-left: 10px;
         }
         
-        .export-btn:hover {
-            background: #1e7e34;
+        .export-excel-btn:hover {
+            background: #17a2b8;
         }
         
         .row-number {
@@ -173,7 +174,7 @@
 </head>
 <body>
     <div class="header">
-        <h1> טבלת סרטוני אשר והנכדים</h1>
+        <h1>📹 טבלת סרטוני אשר ומשפחה</h1>
         <p>אוסף מלא של 200 סרטונים מיוטיוב</p>
     </div>
     
@@ -214,7 +215,7 @@
             
             <button onclick="filterTable()">סנן</button>
             <button onclick="resetFilters()">איפוס</button>
-            <button class="export-btn" onclick="exportToCSV()">📁 יצוא ל-CSV</button>
+            <button class="export-excel-btn" onclick="exportToExcel()">📊 יצוא לאקסל</button>
         </div>
     </div>
     
@@ -304,9 +305,23 @@
             { name: 'אשר הילה', title: 'אשר הילה ויובל שרים אבא 11.10.19', link: 'https://www.youtube.com/watch?v=51V8kbwQbPE' },
 
             // אשר יהלי
-            { name: 'אשר יהלי', title: 'אשר יהלי קבלת ספר התורה 10.11.17', link: 'https://www.youtube.com/watch?v=h3eQ7uLYg3g' },
+            { name: 'אשר יהלי', title: 'אשר יהלי 7 יום הולדת 26.12.17', link: 'https://www.youtube.com/watch?v=QVgsACd-33Y&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר יהלי', title: 'אשר יהלי קבלת ספר התורה 10.11.17', link: 'https://www.youtube.com/watch?v=rudvza1Qx3A' },
+            { name: 'אשר יהלי', title: 'אשר יהלי בשירי שבת וקבלת ספר התורה 10.11.17', link: 'https://www.youtube.com/watch?v=nAj6P5EpzK0' },
+            { name: 'אשר יהלי', title: 'אשר יהלי והילה רוקדות - מתפלל 8.5.14', link: 'https://www.youtube.com/watch?v=hDI1fjTYVvc' },
             { name: 'אשר יהלי', title: 'אשר יהלי 6 יום הולדת 26.12.16', link: 'https://www.youtube.com/watch?v=7WEz65uTYVE&t=253s' },
             { name: 'אשר יהלי', title: 'אשר יהלי 1 רכיבה 5.8.19', link: 'https://www.youtube.com/watch?v=Gog6q1KUMls' },
+            { name: 'אשר יהלי', title: 'אשר יהלי קבלת ספר התורה 10.11.17', link: 'https://www.youtube.com/watch?v=h3eQ7uLYg3g' },
+            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה הטברנה 16.2.23', link: 'https://www.youtube.com/watch?v=uairlC8YIM4' },
+            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה היוונית 16.2.23', link: 'https://www.youtube.com/watch?v=soLb--oDTGY' },
+            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה הריקוד האומנותי 16.2.23', link: 'https://www.youtube.com/watch?v=5EfO8aTACdA' },
+            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה מסיבת הריקודים 16.2.23', link: 'https://www.youtube.com/watch?v=9kRjcL62cx4&t=1s' },
+            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה קבלת פנים לאורחים 16.2.23', link: 'https://www.youtube.com/watch?v=URxFr5kiKyc' },
+            { name: 'אשר יהלי', title: 'אשר יהלי טכס סיום כיתה ו 29.6.22', link: 'https://www.youtube.com/watch?v=2fms6QBWPBU' },
+            { name: 'אשר יהלי', title: 'אשר יהלי 2 רכיבה טיפולית 26.8.19', link: 'https://www.youtube.com/watch?v=4fZGxgbK9X0&pp=0gcJCa0JAYcqIYzv' },
+            { name: 'אשר יהלי', title: 'אשר יהלי מכינה פנקייק 12.7.20', link: 'https://www.youtube.com/watch?v=b7TOdR7JLKI' },
+            { name: 'אשר יהלי', title: 'אשר יהלי 8 יוֹם הולדת 26.12.18', link: 'https://www.youtube.com/watch?v=djDqMNNT7do' },
+            { name: 'אשר יהלי', title: 'אשר יהלי מסיבת חנוכה בגן 7.12.15', link: 'https://www.youtube.com/watch?v=rlk-mgq9Crc' },
 
             // אשר טוהר
             { name: 'אשר טוהר', title: 'אשר טוהר טורניר כדוריד 1.3.25', link: 'https://www.youtube.com/watch?v=J6XNiKvEK8I' },
@@ -481,21 +496,106 @@
             renderTable(filteredData);
         }
 
+        // פונקציית יצוא CSV מתוקנת לעברית
         function exportToCSV() {
+            // BOM לתמיכה בעברית ב-Excel
+            const BOM = '\uFEFF';
+            
+            // כותרת CSV
             const csvHeader = 'מספר,שם,כותרת הסרטון,קישור\n';
+            
+            // תוכן CSV עם קידוד נכון
             const csvContent = filteredData.map((video, index) => {
-                return `${index + 1},"${video.name}","${video.title}","${video.link}"`;
+                // שימוש בגרשיים כפולות ל-escape של גרשיים בתוך הטקסט
+                const escapedTitle = video.title.replace(/"/g, '""');
+                const escapedName = video.name.replace(/"/g, '""');
+                return `${index + 1},"${escapedName}","${escapedTitle}","${video.link}"`;
             }).join('\n');
             
-            const csvData = csvHeader + csvContent;
-            const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+            // חיבור הכל עם BOM
+            const csvData = BOM + csvHeader + csvContent;
+            
+            // יצירת הקובץ והורדה
+            const blob = new Blob([csvData], { 
+                type: 'text/csv;charset=utf-8;' 
+            });
+            
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', 'asher_videos_table.csv');
+            
+            // שם קובץ עם תאריך
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0];
+            link.setAttribute('download', `asher_videos_${dateStr}.csv`);
+            
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // פונקציית יצוא Excel טובה יותר
+        function exportToExcel() {
+            // יצירת HTML table מלא לפורמט Excel
+            let excelContent = `
+                <table border="1">
+                    <tr style="background-color: #4472C4; color: white; font-weight: bold;">
+                        <td>מספר</td>
+                        <td>שם</td>
+                        <td>כותרת הסרטון</td>
+                        <td>קישור</td>
+                    </tr>
+            `;
+            
+            filteredData.forEach((video, index) => {
+                excelContent += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${video.name}</td>
+                        <td style="text-align: right;">${video.title}</td>
+                        <td><a href="${video.link}" target="_blank">${video.link}</a></td>
+                    </tr>
+                `;
+            });
+            
+            excelContent += '</table>';
+            
+            // הוספת BOM ו-HTML headers לעברית
+            const BOM = '\uFEFF';
+            const fullContent = BOM + `
+                <!DOCTYPE html>
+                <html dir="rtl" lang="he">
+                <head>
+                    <meta charset="utf-8">
+                    <style>
+                        body { font-family: Arial, sans-serif; direction: rtl; }
+                        table { width: 100%; border-collapse: collapse; }
+                        td { padding: 8px; text-align: center; }
+                    </style>
+                </head>
+                <body>
+                    ${excelContent}
+                </body>
+                </html>
+            `;
+            
+            const blob = new Blob([fullContent], {
+                type: 'application/vnd.ms-excel;charset=utf-8;'
+            });
+            
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0];
+            link.setAttribute('download', `asher_videos_${dateStr}.xls`);
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         }
 
         // Event listeners
@@ -506,18 +606,4 @@
         renderTable(videosData);
     </script>
 </body>
-</html> יהלי בת מצווה הטברנה 16.2.23', link: 'https://www.youtube.com/watch?v=uairlC8YIM4' },
-            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה היוונית 16.2.23', link: 'https://www.youtube.com/watch?v=soLb--oDTGY' },
-            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה הריקוד האומנותי 16.2.23', link: 'https://www.youtube.com/watch?v=5EfO8aTACdA' },
-            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה מסיבת הריקודים 16.2.23', link: 'https://www.youtube.com/watch?v=9kRjcL62cx4&t=1s' },
-            { name: 'אשר יהלי', title: 'אשר יהלי בת מצווה קבלת פנים לאורחים 16.2.23', link: 'https://www.youtube.com/watch?v=URxFr5kiKyc' },
-            { name: 'אשר יהלי', title: 'אשר יהלי טכס סיום כיתה ו 29.6.22', link: 'https://www.youtube.com/watch?v=2fms6QBWPBU' },
-            { name: 'אשר יהלי', title: 'אשר יהלי 2 רכיבה טיפולית 26.8.19', link: 'https://www.youtube.com/watch?v=4fZGxgbK9X0&pp=0gcJCa0JAYcqIYzv' },
-            { name: 'אשר יהלי', title: 'אשר יהלי מכינה פנקייק 12.7.20', link: 'https://www.youtube.com/watch?v=b7TOdR7JLKI' },
-            { name: 'אשר יהלי', title: 'אשר יהלי 8 יוֹם הולדת 26.12.18', link: 'https://www.youtube.com/watch?v=djDqMNNT7do' },
-            { name: 'אשר יהלי', title: 'אשר יהלי מסיבת חנוכה בגן 7.12.15', link: 'https://www.youtube.com/watch?v=rlk-mgq9Crc' },
-            { name: 'אשר יהלי', title: 'אשר יהלי 7 יום הולדת 26.12.17', link: 'https://www.youtube.com/watch?v=QVgsACd-33Y&pp=0gcJCa0JAYcqIYzv' },
-            { name: 'אשר יהלי', title: 'אשר יהלי קבלת ספר התורה 10.11.17', link: 'https://www.youtube.com/watch?v=rudvza1Qx3A' },
-            { name: 'אשר יהלי', title: 'אשר יהלי בשירי שבת וקבלת ספר התורה 10.11.17', link: 'https://www.youtube.com/watch?v=nAj6P5EpzK0' },
-            { name: 'אשר יהלי', title: 'אשר יהלי והילה רוקדות - מתפלל 8.5.14', link: 'https://www.youtube.com/watch?v=hDI1fjTYVvc' },
-            { name: 'אשר יהלי', title: 'אשר
+</html>
